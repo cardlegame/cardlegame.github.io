@@ -49,43 +49,43 @@ CARD_SETS = {
   'GVG': 2.0, # Goblins vs Gnomes
   'BRM': 3.0, # Blackrock Mountain
   'TGT': 4.0, # The Grand Tournament
-	'LOE': 5.0, # The League of Explorers
+  'LOE': 5.0, # The League of Explorers
 
   # 2016
-	'OG': 6.0, # Whispers of the Old Gods
-	'KARA': 7.0, # One Night in Karazhan
-	'GANGS': 8.0, # Mean Streets of Gadgetzan
-  
+  'OG': 6.0, # Whispers of the Old Gods
+  'KARA': 7.0, # One Night in Karazhan
+  'GANGS': 8.0, # Mean Streets of Gadgetzan
+
   # 2017
-	'UNGORO': 9.0, # Journey to Un'Goro
-	'ICECROWN': 10.0, # Knights of the Frozen Throne
-	'LOOTAPALOOZA': 11.0, # Kobolds & Catacombs
-  
+  'UNGORO': 9.0, # Journey to Un'Goro
+  'ICECROWN': 10.0, # Knights of the Frozen Throne
+  'LOOTAPALOOZA': 11.0, # Kobolds & Catacombs
+
   # 2018
-	'GILNEAS': 12.0, # The Witchwood
-	'BOOMSDAY': 13.0, # The Boomsday Project
+  'GILNEAS': 12.0, # The Witchwood
+  'BOOMSDAY': 13.0, # The Boomsday Project
   'TROLL': 14.0, # Rastakhan's Rumble
-  
+
   # 2019
   'DALARAN': 15.0, # Rise of Shadows
-	'ULDUM': 16.0, # Saviours of Uldum
-	'DRAGONS': 17.0, # Descent of Dragons
+  'ULDUM': 16.0, # Saviours of Uldum
+  'DRAGONS': 17.0, # Descent of Dragons
   'YEAR_OF_THE_DRAGON': 17.0, # ??? Maybe Galakrond's Awakening?
-  
+
   # 2020
   'BLACK_TEMPLE': 19.0, # Ashes of Outlands
   'DEMON_HUNTER_INITIATE': 19.5,
   'SCHOLOMANCE': 20.0, # Scholomance Academy
   'DARKMOON_FAIRE': 21.0, # Madness at the Darkmoon Faire
-  
+
   # 2021
   'THE_BARRENS': 22.0, # Forged in the Barrens
-	'STORMWIND': 23.0, # United in Stormwind
+  'STORMWIND': 23.0, # United in Stormwind
   'ALTERAC_VALLEY': 24.0, # Fractured in Alterac Valley
 
   # 2022
-	'THE_SUNKEN_CITY': 25.0, # Voyage to the Sunken City
-	'REVENDRETH': 26.0, # Murder at Castle Nathria
+  'THE_SUNKEN_CITY': 25.0, # Voyage to the Sunken City
+  'REVENDRETH': 26.0, # Murder at Castle Nathria
   'PATH_OF_ARTHAS': 26.5, # ???
   'RETURN_OF_THE_LICH_KING': 27.0, # Return of the Lich King
 
@@ -97,8 +97,8 @@ CARD_SETS = {
   # 2024
   'WONDERS': 31.0, # Caverns of Time
   'WHIZBANGS_WORKSHOP': 32.0, # Whizbang's Workshop
-	'ISLAND_VACATION': 33.0, # Perils in Paradise
-	'SPACE': 34.0, # Great Dark Beyond
+  'ISLAND_VACATION': 33.0, # Perils in Paradise
+  'SPACE': 34.0, # Great Dark Beyond
 }
 
 converted_cards = {}
