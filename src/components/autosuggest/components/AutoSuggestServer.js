@@ -2,7 +2,6 @@ import React from "react";
 import { useDebounce } from "../utils/useDebounce.js";
 import { AutoSuggestContainer } from "../components/AutoSuggestContainer.js";
 import "../index.css";
-import fetch from "node-fetch";
 
 
 export const AutoSuggestServer = React.forwardRef(
@@ -16,26 +15,6 @@ export const AutoSuggestServer = React.forwardRef(
 
         React.useEffect(() => {
             if (isOpen && value) setLoading(true);
-            if (isOpen && value && debouncedSearchText && value === debouncedSearchText) {
-                fetch(`${url}/${encodeURIComponent(debouncedSearchText)}`)
-                    .then((res) => res.json())
-                    .then((data) => {
-                        if (data && data.length) {
-                            setOptions(data);
-                            setNoResult(false);
-                        } else {
-                            setIsOpen(false);
-                            setOptions([]);
-                            setNoResult(true);
-                        }
-                        setLoading(false);
-                        setErrored(false);
-                    })
-                    .catch(() => {
-                        setErrored(true);
-                        setLoading(false);
-                    });
-            }
         }, [isOpen, value, debouncedSearchText, url]);
 
         React.useEffect(() => {
