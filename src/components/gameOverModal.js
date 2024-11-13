@@ -60,13 +60,15 @@ export const GameOverModal = ({ isOpen, handleClose, styles, gameState, gameMode
             <div className="h-full flex flex-col text-center items-center justify-between max-w-[390px] mx-auto text-stone-50">
                 <div className="w-full">
                     <button className="float-right text-2xl border border-stone-50 px-2 rounded-full" onClick={handleClose}>X</button>
-                    <img src={(gameState === state.won) ? "{process.env.PUBLIC_URL}/end/victory.png" : "{process.env.PUBLIC_URL}/end/defeat.png"} className={"pt-4"} />
+                    <img src={(gameState === state.won) ? "end/victory.png" : "end/defeat.png"} className={"pt-4"} />
                 </div>
                 
                 {gameState === state.lost && (
                 <div>
                     <div className="text-xl">The card was</div>
-                    <div className="text-3xl">{cardAnswer.name}</div>
+                    <div className="text-3xl">
+                      <a href="https://hearthstone.wiki.gg/{cardAnswer.name}">{cardAnswer.name}</a>
+                    </div>
                 </div>
                 )}
                 <div>
