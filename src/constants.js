@@ -97,19 +97,19 @@ const imgArr = []
 const classes = ["Neutral", "DemonHunter", "Druid", "Hunter", "Mage", "Neutral", "Paladin", "Priest", "Rogue", "Shaman"]
 
 for (let i = 0; i < 5; i++){
-    imgArr.push("/rarity/" + i + ".png");
+    imgArr.push("%PUBLIC_URL%/rarity/" + i + ".png");
 }
 
 classes.map((cla) => {
-    imgArr.push("/classes/" + cla + ".png");
+    imgArr.push("%PUBLIC_URL%/classes/" + cla + ".png");
 })
 
 for (let i = -1; i < 25; i++) {
-    imgArr.push("/sets/" + i + ".png");
+    imgArr.push("%PUBLIC_URL%/sets/" + i + ".png");
 }
 
-imgArr.push("/end/victory.png")
-imgArr.push("/end/defeat.png")
+imgArr.push("%PUBLIC_URL%/end/victory.png")
+imgArr.push("%PUBLIC_URL%/end/defeat.png")
 
 export const imageArray = imgArr
 

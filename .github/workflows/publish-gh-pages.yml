@@ -26,6 +26,8 @@ jobs:
           node-version: 22
       - run: npm install
       - run: npm run build
+        env:
+          PUBLIC_URL=http://cardlegame.github.io/Cardle
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
