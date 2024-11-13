@@ -67,7 +67,7 @@ export const GameOverModal = ({ isOpen, handleClose, styles, gameState, gameMode
                 <div>
                     <div className="text-xl">The card was</div>
                     <div className="text-3xl">
-                      <a href=`https://hearthstone.wiki.gg/${cardAnswer.name}`>{cardAnswer.name}</a>
+                      <a href="https://hearthstone.wiki.gg/${cardAnswer.name}">{cardAnswer.name}</a>
                     </div>
                 </div>
                 )}
