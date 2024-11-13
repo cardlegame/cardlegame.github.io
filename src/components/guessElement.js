@@ -8,9 +8,9 @@ function GuessElement(props){
                 {(props.element.status === status.below) && <div className="p-0 text-lg leading-[1rem]">▲</div>}
                 {(props.element.status === status.above) && <div className="p-0 text-lg leading-[1rem]">▼</div>}
                 <div className="p-0 text-4xl xl:text-5xl leading-[2rem]">
-                    {(props.element.type === type.set) && <img src={"%PUBLIC_URL%/sets/" + props.element.value + ".png"} alt={props.element.value}/>}
-                    {(props.element.type === type.class) && <img src={"%PUBLIC_URL%/classes/" + props.element.value + ".png"} alt={props.element.value} /> }
-                    {(props.element.type === type.rarity) && <img className="lg:pt-2" src={"%PUBLIC_URL%/rarity/" + props.element.value + ".png"} alt={props.element.value} />}
+                    {(props.element.type === type.set) && <img src={process.env.PUBLIC_URL + "/sets/" + props.element.value + ".png"} alt={props.element.value}/>}
+                    {(props.element.type === type.class) && <img src={process.env.PUBLIC_URL + "/classes/" + props.element.value + ".png"} alt={props.element.value} /> }
+                    {(props.element.type === type.rarity) && <img className="lg:pt-2" src={process.env.PUBLIC_URL + "/rarity/" + props.element.value + ".png"} alt={props.element.value} />}
                     {((props.element.type === type.cost) || (props.element.type === type.attack) || (props.element.type == type.health)) && 
                     <span>{props.element.value}</span>}
                 </div>
