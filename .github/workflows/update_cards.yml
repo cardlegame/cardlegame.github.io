@@ -14,7 +14,7 @@ jobs:
       with:
         python-version: '3.x'
     - run: pip install -r .github/workflows/requirements.txt # Will automatically pull the latest version (and thus card data) from pypi
-    - run: python -u ./github/workflows/update_cards.py
+    - run: python -u .github/workflows/update_cards.py
       timeout-minutes: 60
     - name: Commit card updates (if any)
       run: |
