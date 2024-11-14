@@ -1,3 +1,4 @@
 ﻿requests
 hearthstone
 hearthstone-data
+setuptools
