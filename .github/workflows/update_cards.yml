@@ -22,6 +22,7 @@ jobs:
       run: |
         NUM_FILES=0
         git diff --quiet --exit-code || NUM_FILES=$?
+        echo "Detected $NUM_FILES changed files"
         if [ $NUM_FILES -eq 0 ]; then exit 0; fi # If no unstaged files, exit the script
         git config --global user.email "cardle@noreply.github.com"
         git config --global user.name "Cardle crontab"
