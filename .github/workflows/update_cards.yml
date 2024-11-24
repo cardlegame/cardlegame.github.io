@@ -18,7 +18,6 @@ jobs:
     - run: pip install -r .github/workflows/requirements.txt # Will automatically pull the latest version (and thus card data) from pypi
     - run: python -u .github/workflows/update_cards.py
       timeout-minutes: 60
-    - name: Check for any changed files
     - name: Commit card updates (if any)
       run: |
         git diff --quiet --exit-code # Will exit with the number of unstaged files
