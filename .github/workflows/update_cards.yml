@@ -3,6 +3,8 @@ on:
   schedule:
     - cron: '0 1 * * *' # Check daily for hearthstone card updates
   workflow_dispatch:
+permissions:
+  contents: write
 
 jobs:
   run:
@@ -16,10 +18,12 @@ jobs:
     - run: pip install -r .github/workflows/requirements.txt # Will automatically pull the latest version (and thus card data) from pypi
     - run: python -u .github/workflows/update_cards.py
       timeout-minutes: 60
+    - name: Check for any changed files
     - name: Commit card updates (if any)
       run: |
+        git diff --quiet --exit-code # Will exit with the number of unstaged files
+        if [ $? -eq 0 ]; then exit 0; fi # If no unstaged files, exit the script
         git config --global user.email "cardle@noreply.github.com"
         git config --global user.name "Cardle crontab"
         git commit -am "Updated cards on $(date)"
         git push
-      continue-on-error: true # If there are no new cards this script will fail; don't cause that to fail the task.
