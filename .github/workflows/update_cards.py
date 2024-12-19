@@ -174,47 +174,32 @@ for card_name in alphabetized_names:
 repo_root = Path(subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], text=True).strip())
 data_folder = repo_root / 'src' / 'data'
 
-with open(f'{data_folder}/wild.json', 'w') as f:
-  json.dump(wild_cards, f)
-with open(f'{data_folder}/wildlegendaries.json', 'w') as f:
-  json.dump(wild_legendaries, f)
-with open(f'{data_folder}/classic.json', 'w') as f:
-  json.dump(classic_cards, f)
-with open(f'{data_folder}/standard.json', 'w') as f:
-  json.dump(standard_cards, f)
+def compare_and_write(file, new_contents):
+  with file.open('r') as f:
+    old_contents = json.load(f)
 
-"""
-### Comparison code, for reference ###
+  new_cards_dict = {card['name']:card for card in new_contents}
+  for old_card in old_contents:
+    card_name = old_card['name']
+    new_card = new_cards_dict.get(card_name, None)
+    if not new_card:
+      print(f'Card {card_name} was removed from {file.name}')
+      print('Old:', old_card)
+      continue
+    if old_card != new_card:
+      print(f'Card {card_name} was changed in {file.name}')
+      print('Old:', old_card)
+      print('New:', new_card)
+    del new_cards_dict[card_name]
 
-def compare_files(old_file, new_file):
-  with open(old_file, 'r') as f:
-    old = json.load(f)
-    old = [card for card in old if card['set'] != None] # Seems like there's some corrupt data in some files
-    old.sort(key = lambda card: card['name'])
+  for card_name, new_card in new_cards_dict:
+    print(f'Card {card_name} was added to {file.name}')
+    print('new:', new_card)
 
-  with open(new_file, 'r') as f:
-    new = json.load(f)
-    new.sort(key = lambda card: card['name'])
+  with file.open('w') as f:
+    json.dump(new_contents, f)
 
-  if old == new:
-    return True
-
-  print(old_file)
-  if len(old) != len(new):
-    print('Length mismatch; old:', len(old), 'new:', len(new))
-
-  for i in range(min(len(old), len(new))):
-    if old[i] != new[i]:
-      print(i)
-      print('Old:', old[i])
-      print('New:', new[i])
-
-if compare_files('wild.json', 'wild_new.json'):
-  print('Wild matched')
-if compare_files('wildlegendaries.json', 'wildlegendaries_new.json'):
-  print('Wild legendaries matched')
-if compare_files('classic.json', 'classic_new.json'):
-  print('Classic matched')
-if compare_files('standard.json', 'standard_new.json'):
-  print('Standard cards matched')
-"""
+compare_and_write(data_folder / 'wild.json', wild_cards)
+compare_and_write(data_folder / 'wildlegendaries.json', wild_legendaries)
+compare_and_write(data_folder / 'classic.json', classic_cards)
+compare_and_write(data_folder / 'standard.json', standard_cards)
