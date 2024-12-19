@@ -36,10 +36,10 @@ CARD_SETS = {
   'BATTLEGROUNDS': None,
   'LETTUCE': None, # Mercenaries
   'PLACEHOLDER_202204': None,
-  'EVENT': None,
 
   # Valid, but lower priority than actual sets
   'CORE': -2.0,
+  'EVENT': -2.0,
   'VANILLA': -1.0,
   'LEGACY': 0.0,
   'EXPERT1': 0.0,
@@ -107,7 +107,7 @@ converted_cards = {}
 cardid_db, _ = cardxml.load()
 for card in cardid_db.values():
   if card.type != CardType.MINION or card.collectible != True:
-    continue # Cardle only supports collectible minions
+    continue # Cardle only supports collectible minions, i.e. they have attack and health and can be put in your deck
 
   if card.card_set.name not in CARD_SETS:
     raise ValueError(f'Found card data from an unknown set: {card.card_set.name}. Was there an expansion recently? If so, please update the CARD_SETS and STANDARD_RANGE variables.')
@@ -192,7 +192,7 @@ def compare_and_write(file, new_contents):
       print('New:', new_card)
     del new_cards_dict[card_name]
 
-  for card_name, new_card in new_cards_dict:
+  for card_name, new_card in new_cards_dict.items():
     print(f'Card {card_name} was added to {file.name}')
     print('new:', new_card)
 
