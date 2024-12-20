@@ -183,8 +183,6 @@ def compare_and_write(file, new_contents):
   with file.open('r') as f:
     old_contents = json.load(f)
 
-  print(file, len(old_contents))
-
   new_cards_dict = {card['name']:card for card in new_contents}
   for old_card in old_contents:
     card_name = old_card['name']
