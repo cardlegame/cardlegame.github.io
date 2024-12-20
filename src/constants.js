@@ -29,7 +29,7 @@ export const set = {
 
 export const setArray = [set.standard, set.wild, set.classic, set.wildlegend, set.spidertank]
 
-export const gameLength = { [set.standard]: 7, [set.wild]: 10, [set.classic]: 5, [set.wildlegend]: 7, [set.spidertank]: 20 }
+export const gameLength = { [set.standard]: 7, [set.wild]: 10, [set.classic]: 5, [set.wildlegend]: 7, [set.spidertank]: 10 }
 export const cards = {
     [set.standard]: StandardCards,
     [set.wild]: WildCards,

@@ -156,8 +156,8 @@ for card_name in alphabetized_names:
   if card['rarity'] == 4 and card['set'] >= 0:
     wild_legendaries.append(card)
 
-  # If the card is a 3/4, it's a "spider tank"
-  if card['attack'] == 3.0 and card['health'] == 4.0:
+  # If the card is a 3 mana 3/4, it's a "spider tank"
+  if (card['cost'], card['attack'], card['health']) == (3.0, 3.0, 4.0):
     spider_tanks.append(card)
 
   # If any variant is from the classic set, use that.
@@ -182,6 +182,8 @@ data_folder = repo_root / 'src' / 'data'
 def compare_and_write(file, new_contents):
   with file.open('r') as f:
     old_contents = json.load(f)
+
+  print(file, len(old_contents))
 
   new_cards_dict = {card['name']:card for card in new_contents}
   for old_card in old_contents:
