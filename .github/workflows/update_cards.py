@@ -134,6 +134,7 @@ wild_cards = []
 wild_legendaries = []
 classic_cards = []
 standard_cards = []
+spider_tanks = []
 
 STANDARD_RANGE = [28.0, 34.0] # Inclusive on both ends
 
@@ -154,6 +155,10 @@ for card_name in alphabetized_names:
   # Legendary card from any non-classic set
   if card['rarity'] == 4 and card['set'] >= 0:
     wild_legendaries.append(card)
+
+  # If the card is a 3/4, it's a "spider tank"
+  if card['attack'] == 3.0 and card['health'] == 4.0:
+    spider_tanks.append(card)
 
   # If any variant is from the classic set, use that.
   classic_card = next((card for card in cards if card['set'] == -1.0), None)
@@ -203,3 +208,4 @@ compare_and_write(data_folder / 'wild.json', wild_cards)
 compare_and_write(data_folder / 'wildlegendaries.json', wild_legendaries)
 compare_and_write(data_folder / 'classic.json', classic_cards)
 compare_and_write(data_folder / 'standard.json', standard_cards)
+compare_and_write(data_folder / 'spider_tank.json', spider_tanks)
