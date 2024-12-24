@@ -32,7 +32,7 @@ export const InfoModal = ({ isOpen, handleClose, styles }) => {
                     </div>
                 </div>
                 <div className="text-md text-center">Game mode and minion set can be changed in the top left menu. Happy searching!</div>
-                <div className="text-md">Adapted with ❤️ from <a href="https://github.com/evanomnom/cardle">the original</a> by <a href="https://github.com/cardlegame/Cardle">darkid</a></div>
+                <div className="text-md">Adapted with ❤️ from <a href="https://github.com/evanomnom/cardle">the original</a> by <a href="https://github.com/cardlegame/cardlegame.github.io">darkid</a></div>
             </div>
         </Modal>
     )
