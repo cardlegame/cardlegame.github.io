@@ -30,6 +30,7 @@ jobs:
         env:
           PUBLIC_URL: 'https://cardlegame.github.io'
       - uses: actions/configure-pages@v5
+      - run: cp -r Cardle build/ # Redirect page from the old site
       - uses: actions/upload-pages-artifact@v3
         with:
           path: build/
