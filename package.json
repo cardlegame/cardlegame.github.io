@@ -1,7 +1,7 @@
 {
   "name": "cardle",
   "version": "0.1.0",
-  "homepage" : "https://cardlegame.github.io",
+  "homepage" : "https://cardlegame.com",
   "private": true,
   "dependencies": {
     "@headlessui/react": "^1.4.3",
