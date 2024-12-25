@@ -112,7 +112,7 @@ classes.map((cla) => {
 })
 
 let set_ids = new Set();
-for (let card of WildCards) {
+for (let card of WildLegendaryCards) {
     set_ids.add(card['set'])
 }
 console.log(set_ids);
