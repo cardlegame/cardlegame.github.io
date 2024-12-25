@@ -111,9 +111,14 @@ classes.map((cla) => {
     imgArr.push(process.env.PUBLIC_URL + "/classes/" + cla + ".png");
 })
 
-for (let i = -1; i < 25; i++) {
-    imgArr.push(process.env.PUBLIC_URL + "/sets/" + i + ".png");
+let set_ids = Set();
+for (let card in WildCards) {
+    set_ids.add(card['set'])
 }
+console.log(set_ids);
+set_ids.map((set) => {
+    imgArr.push(process.env.PUBLIC_URL + "/sets/" + set + ".png");
+})
 
 imgArr.push(process.env.PUBLIC_URL + "/end/victory.png")
 imgArr.push(process.env.PUBLIC_URL + "/end/defeat.png")
