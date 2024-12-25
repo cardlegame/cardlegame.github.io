@@ -111,7 +111,7 @@ classes.map((cla) => {
     imgArr.push(process.env.PUBLIC_URL + "/classes/" + cla + ".png");
 })
 
-let set_ids = Set();
+let set_ids = new Set();
 for (let card in WildCards) {
     set_ids.add(card['set'])
 }
