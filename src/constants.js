@@ -111,8 +111,12 @@ classes.map((cla) => {
     imgArr.push(process.env.PUBLIC_URL + "/classes/" + cla + ".png");
 })
 
-for (let i = -1; i < 25; i++) {
-    imgArr.push(process.env.PUBLIC_URL + "/sets/" + i + ".png");
+// The list of sets is not quite sequential, but we would like to precache all of the images.
+// We could pull the images from WildCards but there's a legendary in every set so this is faster.
+let setIds = new Set();
+for (let card of WildLegendaryCards) setIds.add(card['set'])
+for (let setId in setIds) {
+    imgArr.push(process.env.PUBLIC_URL + "/sets/" + setId + ".png");
 }
 
 imgArr.push(process.env.PUBLIC_URL + "/end/victory.png")

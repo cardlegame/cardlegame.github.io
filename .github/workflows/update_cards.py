@@ -70,11 +70,11 @@ CARD_SETS = {
   'DALARAN': 15.0, # Rise of Shadows
   'ULDUM': 16.0, # Saviours of Uldum
   'DRAGONS': 17.0, # Descent of Dragons
-  'YEAR_OF_THE_DRAGON': 17.0, # ??? Maybe Galakrond's Awakening?
+  'YEAR_OF_THE_DRAGON': 17.0, # Galakrond's Awakening
 
   # 2020
   'BLACK_TEMPLE': 19.0, # Ashes of Outlands
-  'DEMON_HUNTER_INITIATE': 19.5,
+  'DEMON_HUNTER_INITIATE': 19.5, # Demon Hunter Initiate
   'SCHOLOMANCE': 20.0, # Scholomance Academy
   'DARKMOON_FAIRE': 21.0, # Madness at the Darkmoon Faire
 
@@ -86,7 +86,7 @@ CARD_SETS = {
   # 2022
   'THE_SUNKEN_CITY': 25.0, # Voyage to the Sunken City
   'REVENDRETH': 26.0, # Murder at Castle Nathria
-  'PATH_OF_ARTHAS': 26.5, # ???
+  'PATH_OF_ARTHAS': 26.5, # Path of Arthas
   'RETURN_OF_THE_LICH_KING': 27.0, # Return of the Lich King
 
   # 2023

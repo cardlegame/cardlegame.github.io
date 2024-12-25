@@ -28,7 +28,7 @@ jobs:
       - run: npm install
       - run: npm run build
         env:
-          PUBLIC_URL: 'https://cardlegame.github.io'
+          PUBLIC_URL: 'https://cardlegame.com'
       - uses: actions/configure-pages@v5
       - run: cp -r Cardle build/ # Redirect page from the old site
       - uses: actions/upload-pages-artifact@v3
