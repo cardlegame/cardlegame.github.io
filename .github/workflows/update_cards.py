@@ -13,12 +13,13 @@ CLASS_NAMES = {
   'SHAMAN': 'Shaman',
   'HUNTER': 'Hunter',
   'PRIEST': 'Priest',
-  'NEUTRAL': 'Neutral',
   'WARLOCK': 'Warlock',
   'ROGUE': 'Rogue',
   'WARRIOR': 'Warrior',
   'PALADIN': 'Paladin',
   'DEATHKNIGHT': 'DeathKnight',
+  'NEUTRAL': 'Neutral',
+  'INVALID': 'Neutral', # The new cards from the starcraft miniset are listed as 'invalid' right now.
 }
 
 RARITIES = {
