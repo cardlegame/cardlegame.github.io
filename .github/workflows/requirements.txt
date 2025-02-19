@@ -2,3 +2,4 @@
 hearthstone
 hearthstone-data
 setuptools
+bs4

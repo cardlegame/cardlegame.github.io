@@ -19,7 +19,7 @@ CLASS_NAMES = {
   'PALADIN': 'Paladin',
   'DEATHKNIGHT': 'DeathKnight',
   'NEUTRAL': 'Neutral',
-  'INVALID': 'Neutral', # The new cards from the starcraft miniset are listed as 'invalid' right now.
+  'INVALID': 'Neutral', # The new cards from the starcraft miniset are listed as 'invalid' for some odd reason.
 }
 
 RARITIES = {
@@ -100,7 +100,28 @@ CARD_SETS = {
   'WHIZBANGS_WORKSHOP': 32.0, # Whizbang's Workshop
   'ISLAND_VACATION': 33.0, # Perils in Paradise
   'SPACE': 34.0, # Great Dark Beyond
+
+  # 2025
+  'EMERALD_DREAM': 35.0, # Into the Emerald Dream
 }
+LATEST_CARD_SET = list(CARD_SETS.values())[-1]
+
+repo_root = Path(subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], text=True).strip())
+
+# Make sure we have images from the latest set
+if not Path(f'{repo_root}/public/sets/{LATEST_CARD_SET:.0f}.png').exists():
+  import requests
+  r = requests.get('https://hearthstone.blizzard.com/en-us/expansions-adventures')
+  r.raise_for_status()
+  import bs4
+  soup = bs4.BeautifulSoup(r.text, 'html.parser')
+  expansion_divs = soup.find_all('div', {'class': 'ExpansionLink-background'})
+  for i, expansion in enumerate(expansion_divs[:3]):
+    image = expansion["style"][22:-3]
+    r = requests.get(image)
+    with Path(f'{repo_root}/public/sets/temp_{i}.png').open('wb') as f:
+      f.write(r.content)
+  print('Downloaded the first 3 expansion icons as public/sets/temp_[012].png, please pick one as the set icon')
 
 converted_cards = {}
 
@@ -138,6 +159,8 @@ standard_cards = []
 spider_tanks = []
 
 STANDARD_RANGE = [28.0, 34.0] # Inclusive on both ends
+if STANDARD_RANGE[1] != LATEST_CARD_SET and STANDARD_RANGE[1] != LATEST_CARD_SET-1:
+  raise ValueError("Make sure you update the standard range when new sets come out")
 
 alphabetized_names = sorted(converted_cards.keys())
 
@@ -177,7 +200,6 @@ for card_name in alphabetized_names:
       standard_cards.append(card)
       break
 
-repo_root = Path(subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], text=True).strip())
 data_folder = repo_root / 'src' / 'data'
 
 def compare_and_write(file, new_contents):
