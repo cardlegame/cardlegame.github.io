@@ -116,11 +116,10 @@ if not Path(f'{repo_root}/public/sets/{LATEST_CARD_SET:.0f}.png').exists():
   r.raise_for_status()
   import bs4
   soup = bs4.BeautifulSoup(r.text, 'html.parser')
-  expansion_divs = soup.find_all('div', {'class': 'ExpansionLink-background'})
-  for i, expansion in enumerate(expansion_divs[:3]):
-    image = expansion["style"][22:-3]
-    r = requests.get(image)
-    with Path(f'{repo_root}/public/sets/temp_{i}.png').open('wb') as f:
+  expansion_imgs = soup.find_all('img', {'class': 'CardSetLogo'})
+  for i, img in enumerate(expansion_imgs[:3]):
+    r = requests.get(img["src"])
+    with Path(f'{repo_root}/public/sets/temp_{i}_{img["alt"]}.png').open('wb') as f:
       f.write(r.content)
   raise ValueError('Downloaded the first 3 expansion icons as public/sets/temp_[012].png, please pick one as the set icon')
 
