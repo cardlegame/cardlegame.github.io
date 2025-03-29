@@ -110,6 +110,7 @@ repo_root = Path(subprocess.check_output(['git', 'rev-parse', '--show-toplevel']
 
 # Make sure we have images from the latest set
 if not Path(f'{repo_root}/public/sets/{LATEST_CARD_SET:.0f}.png').exists():
+  print(f'Could not find a set icon for {LATEST_CARD_SET}.png, downloading')
   import requests
   r = requests.get('https://hearthstone.blizzard.com/en-us/expansions-adventures')
   r.raise_for_status()
@@ -121,7 +122,7 @@ if not Path(f'{repo_root}/public/sets/{LATEST_CARD_SET:.0f}.png').exists():
     r = requests.get(image)
     with Path(f'{repo_root}/public/sets/temp_{i}.png').open('wb') as f:
       f.write(r.content)
-  print('Downloaded the first 3 expansion icons as public/sets/temp_[012].png, please pick one as the set icon')
+  raise ValueError('Downloaded the first 3 expansion icons as public/sets/temp_[012].png, please pick one as the set icon')
 
 converted_cards = {}
 
@@ -158,9 +159,12 @@ classic_cards = []
 standard_cards = []
 spider_tanks = []
 
-STANDARD_RANGE = [28.0, 34.0] # Inclusive on both ends
-if STANDARD_RANGE[1] != LATEST_CARD_SET and STANDARD_RANGE[1] != LATEST_CARD_SET-1:
+STANDARD_RANGE = [32.0, 35.0] # Inclusive on both ends
+if STANDARD_RANGE[1] != LATEST_CARD_SET:
   raise ValueError("Make sure you update the standard range when new sets come out")
+CORE_SET = STANDARD_RANGE[0] - 0.5
+if not Path(f'{repo_root}/public/sets/{CORE_SET:.1f}.png').exists():
+  raise ValueError("Could not find set icon for core set, please rename the image when adjusting the standard range")
 
 alphabetized_names = sorted(converted_cards.keys())
 
@@ -170,7 +174,7 @@ for card_name in alphabetized_names:
   # For wild datasets, use the copy of the card from the most recent set
   card = max(cards, key=lambda card: card['set'])
   if card['set'] == -2.0:
-    card['set'] = 24.5 # Fixup for 'Core', which is identified as 24.5 but has lowest priority.
+    card['set'] = CORE_SET
 
   # Any card from any non-classic set
   if card['set'] >= 0:
@@ -192,11 +196,9 @@ for card_name in alphabetized_names:
     classic_cards.append(classic_card)
 
   for card in cards:
-    if card['set'] == 31.0:
-      continue # Caverns of Time was a direct-to-wild set.
     if card['set'] == -2.0:
-      card['set'] = 24.5 # This is our name for the core set. Deal with it, I guess.
-    if card['set'] == 24.5 or (STANDARD_RANGE[0] <= card['set'] <= STANDARD_RANGE[1]):
+      card['set'] = CORE_SET # This is our name for the core set. Deal with it, I guess.
+    if card['set'] == CORE_SET or (STANDARD_RANGE[0] <= card['set'] <= STANDARD_RANGE[1]):
       standard_cards.append(card)
       break
 
