@@ -111,6 +111,7 @@ CARD_SETS = {
 
   # 2025
   'EMERALD_DREAM': 35.0, # Into the Emerald Dream
+  'THE_LOST_CITY': 36.0, # The Lost City of Un'Goro
 } # end CARD_SETS
 LATEST_CARD_SET = list(CARD_SETS.values())[-1]
 
