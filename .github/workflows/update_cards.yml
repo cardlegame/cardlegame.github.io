@@ -16,10 +16,17 @@ jobs:
       with:
         python-version: '3.x'
     - run: pip install -r .github/workflows/requirements.txt # Will automatically pull the latest version (and thus card data) from pypi
-    - run: python -u .github/workflows/update_cards.py
+    - name: Update cards and/or download new set data
       timeout-minutes: 60
-    - name: Commit card updates (if any)
       run: |
+        CARDS_ERROR=0
+        python -u .github/workflows/update_cards.py || CARDS_ERROR=$?
+        if [ $CARDS_ERROR -eq 2 ] # Special error code which indicates new cards are present
+        then
+          python -u .github/workflows/update_update_cards.py
+          python -u .github/workflows/update_cards.py
+        fi
+        
         NUM_FILES=0
         git diff --quiet --exit-code || NUM_FILES=$?
         echo "Detected $NUM_FILES changed files"

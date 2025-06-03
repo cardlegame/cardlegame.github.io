@@ -37,6 +37,14 @@ CARD_SETS = {
   'BATTLEGROUNDS': None,
   'LETTUCE': None, # Mercenaries
   'PLACEHOLDER_202204': None,
+  
+  # TODO: Confirm no data changes
+  'BASIC': None,
+  'HERO_SKINS': None,
+  'TUTORIAL': None,
+  'CREDITS': None,
+  'MISSIONS': None,
+  'TAVERNS_OF_TIME': None,
 
   # Valid, but lower priority than actual sets
   'CORE': -2.0,
@@ -103,133 +111,123 @@ CARD_SETS = {
 
   # 2025
   'EMERALD_DREAM': 35.0, # Into the Emerald Dream
-}
+} # end CARD_SETS
 LATEST_CARD_SET = list(CARD_SETS.values())[-1]
 
-repo_root = Path(subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], text=True).strip())
+if __name__ == '__main__':
+  repo_root = Path(subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], text=True).strip())
 
-# Make sure we have images from the latest set
-if not Path(f'{repo_root}/public/sets/{LATEST_CARD_SET:.0f}.png').exists():
-  print(f'Could not find a set icon for {LATEST_CARD_SET}.png, downloading')
-  import requests
-  r = requests.get('https://hearthstone.blizzard.com/en-us/expansions-adventures')
-  r.raise_for_status()
-  import bs4
-  soup = bs4.BeautifulSoup(r.text, 'html.parser')
-  expansion_imgs = soup.find_all('img', {'class': 'CardSetLogo'})
-  for i, img in enumerate(expansion_imgs[:3]):
-    r = requests.get(img["src"])
-    with Path(f'{repo_root}/public/sets/temp_{i}_{img["alt"]}.png').open('wb') as f:
-      f.write(r.content)
-  raise ValueError('Downloaded the first 3 expansion icons as public/sets/temp_[012].png, please pick one as the set icon')
+  # Make sure we have images from the latest set
+  if not Path(f'{repo_root}/public/sets/{LATEST_CARD_SET:.0f}.png').exists():
+    exit(2)
 
-converted_cards = {}
+  converted_cards = {}
 
-# Import all cards from hearthsim data
-cardid_db, _ = cardxml.load()
-for card in cardid_db.values():
-  if card.type != CardType.MINION or card.collectible != True:
-    continue # Cardle only supports collectible minions, i.e. they have attack and health and can be put in your deck
+  # Import all cards from hearthsim data
+  cardid_db, _ = cardxml.load()
+  for card in cardid_db.values():
+    if card.type != CardType.MINION or card.collectible != True:
+      continue # Cardle only supports collectible minions, i.e. they have attack and health and can be put in your deck
 
-  if card.card_set.name not in CARD_SETS:
-    raise ValueError(f'Found card data from an unknown set: {card.card_set.name}. Was there an expansion recently? If so, please update the CARD_SETS and STANDARD_RANGE variables.')
+    if card.card_set.name not in CARD_SETS:
+      exit(2)
 
-  card_set = CARD_SETS[card.card_set.name]
-  if card_set is None:
-    continue # Ignore garbage data
+    card_set = CARD_SETS[card.card_set.name]
+    if card_set is None:
+      continue # Ignore garbage data
 
-  # Some cards were reprinted in later sets, possibly with different stats. Keep all (valid) copies of the card for future filtering.
-  if card.name not in converted_cards:
-    converted_cards[card.name] = []
-  converted_cards[card.name].append({
-    'cardClass': CLASS_NAMES[card.card_class.name],
-    'cost': float(card.cost),
-    'name': card.name,
-    'rarity': RARITIES[card.rarity.name],
-    'set': card_set,
-    'attack': float(card.atk),
-    'health': float(card.health),
-  })
+    # Some cards were reprinted in later sets, possibly with different stats. Keep all (valid) copies of the card for future filtering.
+    if card.name not in converted_cards:
+      converted_cards[card.name] = []
+    converted_cards[card.name].append({
+      'cardClass': CLASS_NAMES[card.card_class.name],
+      'cost': float(card.cost),
+      'name': card.name,
+      'rarity': RARITIES[card.rarity.name],
+      'set': card_set,
+      'attack': float(card.atk),
+      'health': float(card.health),
+    })
 
-# Filter cards into the various sets
-wild_cards = []
-wild_legendaries = []
-classic_cards = []
-standard_cards = []
-spider_tanks = []
+  # Filter cards into the various sets
+  wild_cards = []
+  wild_legendaries = []
+  classic_cards = []
+  standard_cards = []
+  spider_tanks = []
 
-STANDARD_RANGE = [32.0, 35.0] # Inclusive on both ends
-if STANDARD_RANGE[1] != LATEST_CARD_SET:
-  raise ValueError("Make sure you update the standard range when new sets come out")
-CORE_SET = STANDARD_RANGE[0] - 0.5
-if not Path(f'{repo_root}/public/sets/{CORE_SET:.1f}.png').exists():
-  raise ValueError("Could not find set icon for core set, please rename the image when adjusting the standard range")
+  STANDARD_RANGE = [32.0, 36.0] # Inclusive on both ends
+  if STANDARD_RANGE[1] != LATEST_CARD_SET:
+    exit(2)
+  CORE_SET = STANDARD_RANGE[0] - 0.5
+  if not Path(f'{repo_root}/public/sets/{CORE_SET:.1f}.png').exists():
+    exit(2)
 
-alphabetized_names = sorted(converted_cards.keys())
+  alphabetized_names = sorted(converted_cards.keys())
 
-for card_name in alphabetized_names:
-  cards = converted_cards[card_name]
+  for card_name in alphabetized_names:
+    cards = converted_cards[card_name]
 
-  # For wild datasets, use the copy of the card from the most recent set
-  card = max(cards, key=lambda card: card['set'])
-  if card['set'] == -2.0:
-    card['set'] = CORE_SET
-
-  # Any card from any non-classic set
-  if card['set'] >= 0:
-    wild_cards.append(card)
-
-  # Legendary card from any non-classic set
-  if card['rarity'] == 4 and card['set'] >= 0:
-    wild_legendaries.append(card)
-
-  # If the card is a 3 mana 3/4, it's a "spider tank"
-  if (card['cost'], card['attack'], card['health']) == (3.0, 3.0, 4.0):
-    spider_tanks.append(card)
-
-  # If any variant is from the classic set, use that.
-  classic_card = next((card for card in cards if card['set'] == -1.0), None)
-  if classic_card:
-    classic_card = copy.copy(classic_card)
-    classic_card['set'] = -1
-    classic_cards.append(classic_card)
-
-  for card in cards:
+    # For wild datasets, use the copy of the card from the most recent set
+    card = max(cards, key=lambda card: card['set'])
     if card['set'] == -2.0:
-      card['set'] = CORE_SET # This is our name for the core set. Deal with it, I guess.
-    if card['set'] == CORE_SET or (STANDARD_RANGE[0] <= card['set'] <= STANDARD_RANGE[1]):
-      standard_cards.append(card)
-      break
+      card['set'] = CORE_SET
 
-data_folder = repo_root / 'src' / 'data'
+    # Any card from any non-classic set
+    if card['set'] >= 0:
+      wild_cards.append(card)
 
-def compare_and_write(file, new_contents):
-  with file.open('r') as f:
-    old_contents = json.load(f)
+    # Legendary card from any non-classic set
+    if card['rarity'] == 4 and card['set'] >= 0:
+      wild_legendaries.append(card)
 
-  new_cards_dict = {card['name']:card for card in new_contents}
-  for old_card in old_contents:
-    card_name = old_card['name']
-    new_card = new_cards_dict.get(card_name, None)
-    if not new_card:
-      print(f'Card {card_name} was removed from {file.name}')
-      print('Old:', old_card)
-      continue
-    if old_card != new_card:
-      print(f'Card {card_name} was changed in {file.name}')
-      print('Old:', old_card)
-      print('New:', new_card)
-    del new_cards_dict[card_name]
+    # If the card is a 3 mana 3/4, it's a "spider tank"
+    if (card['cost'], card['attack'], card['health']) == (3.0, 3.0, 4.0):
+      spider_tanks.append(card)
 
-  for card_name, new_card in new_cards_dict.items():
-    print(f'Card {card_name} was added to {file.name}')
-    print('new:', new_card)
+    # If any variant is from the classic set, use that.
+    classic_card = next((card for card in cards if card['set'] == -1.0), None)
+    if classic_card:
+      classic_card = copy.copy(classic_card)
+      classic_card['set'] = -1
+      classic_cards.append(classic_card)
 
-  with file.open('w') as f:
-    json.dump(new_contents, f)
+    for card in cards:
+      if card['set'] == -2.0:
+        card['set'] = CORE_SET # This is our name for the core set. Deal with it, I guess.
+      if card['set'] == CORE_SET or (STANDARD_RANGE[0] <= card['set'] <= STANDARD_RANGE[1]):
+        standard_cards.append(card)
+        break
 
-compare_and_write(data_folder / 'wild.json', wild_cards)
-compare_and_write(data_folder / 'wildlegendaries.json', wild_legendaries)
-compare_and_write(data_folder / 'classic.json', classic_cards)
-compare_and_write(data_folder / 'standard.json', standard_cards)
-compare_and_write(data_folder / 'spidertank.json', spider_tanks)
+  data_folder = repo_root / 'src' / 'data'
+
+  def compare_and_write(file, new_contents):
+    with file.open('r') as f:
+      old_contents = json.load(f)
+
+    new_cards_dict = {card['name']:card for card in new_contents}
+    for old_card in old_contents:
+      card_name = old_card['name']
+      new_card = new_cards_dict.get(card_name, None)
+      if not new_card:
+        print(f'Card {card_name} was removed from {file.name}')
+        print('Old:', old_card)
+        continue
+      if old_card != new_card:
+        print(f'Card {card_name} was changed in {file.name}')
+        print('Old:', old_card)
+        print('New:', new_card)
+      del new_cards_dict[card_name]
+
+    for card_name, new_card in new_cards_dict.items():
+      print(f'Card {card_name} was added to {file.name}')
+      print('new:', new_card)
+
+    with file.open('w') as f:
+      json.dump(new_contents, f)
+
+  compare_and_write(data_folder / 'wild.json', wild_cards)
+  compare_and_write(data_folder / 'wildlegendaries.json', wild_legendaries)
+  compare_and_write(data_folder / 'classic.json', classic_cards)
+  compare_and_write(data_folder / 'standard.json', standard_cards)
+  compare_and_write(data_folder / 'spidertank.json', spider_tanks)
