@@ -21,7 +21,7 @@ jobs:
       run: |
         CARDS_ERROR=0
         python -u python/update_cards.py || CARDS_ERROR=$?
-        if [ $CARDS_ERROR -eq 2 ] # Special error code which indicates new cards are present
+        if [ $CARDS_ERROR -ne 0 ] # Assume any error means 'please update the script'
         then
           python -u python/update_update_cards.py
           python -u python/update_cards.py

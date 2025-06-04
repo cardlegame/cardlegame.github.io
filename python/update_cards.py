@@ -120,7 +120,7 @@ if __name__ == '__main__':
 
   # Make sure we have images from the latest set
   if not Path(f'{repo_root}/public/sets/{LATEST_CARD_SET:.0f}.png').exists():
-    exit(2)
+    raise ValueError(f'Could not find a set icon for {LATEST_CARD_SET}.png')
 
   converted_cards = {}
 
@@ -131,7 +131,7 @@ if __name__ == '__main__':
       continue # Cardle only supports collectible minions, i.e. they have attack and health and can be put in your deck
 
     if card.card_set.name not in CARD_SETS:
-      exit(2)
+      raise ValueError(f'Found card data from an unknown set: {card.card_set.name}. Was there an expansion recently?')
 
     card_set = CARD_SETS[card.card_set.name]
     if card_set is None:
@@ -159,10 +159,10 @@ if __name__ == '__main__':
 
   STANDARD_RANGE = [32.0, 36.0] # Inclusive on both ends
   if STANDARD_RANGE[1] != LATEST_CARD_SET:
-    exit(2)
+    raise ValueError('Make sure you update the standard range when new sets come out')
   CORE_SET = STANDARD_RANGE[0] - 0.5
   if not Path(f'{repo_root}/public/sets/{CORE_SET:.1f}.png').exists():
-    exit(2)
+    raise ValueError('Make sure you update the filename for CORE_SET whenever standard rotates')
 
   alphabetized_names = sorted(converted_cards.keys())
 
