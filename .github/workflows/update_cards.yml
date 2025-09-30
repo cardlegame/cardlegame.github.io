@@ -15,7 +15,7 @@ jobs:
     - uses: actions/setup-python@v5
       with:
         python-version: '3.x'
-    - run: pip install -r python/requirements.txt # Will automatically pull the latest version (and thus card data) from pypi
+    - run: pip install -U -r python/requirements.txt # Will automatically pull the latest version (and thus card data) from pypi
     - name: Update cards and/or download new set data
       timeout-minutes: 60
       run: |
@@ -23,6 +23,7 @@ jobs:
         python -u python/update_cards.py || CARDS_ERROR=$?
         if [ $CARDS_ERROR -ne 0 ] # Assume any error means 'please update the script'
         then
+          echo "Error running update_cards, running update_update_cards"
           python -u python/update_update_cards.py
           python -u python/update_cards.py
         fi

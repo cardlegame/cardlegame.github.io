@@ -1,5 +1,5 @@
 ﻿requests
 hearthstone
 hearthstone-data
-setuptools
+setuptools<81
 bs4

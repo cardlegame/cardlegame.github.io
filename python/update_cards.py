@@ -43,6 +43,7 @@ CARD_SETS = {
   'CREDITS': None,
   'MISSIONS': None,
   'TAVERNS_OF_TIME': None,
+  'PET': None,
 
   # Valid, but lower priority than actual sets
   'CORE': -2.0,
@@ -110,6 +111,7 @@ CARD_SETS = {
   # 2025
   'EMERALD_DREAM': 35.0, # Into the Emerald Dream
   'THE_LOST_CITY': 36.0, # The Lost City of Un'Goro
+  'TIME_TRAVEL': 37.0, # Across the Timeways
 } # end CARD_SETS
 LATEST_CARD_SET = list(CARD_SETS.values())[-1]
 
@@ -155,7 +157,7 @@ if __name__ == '__main__':
   standard_cards = []
   spider_tanks = []
 
-  STANDARD_RANGE = [32.0, 36.0] # Inclusive on both ends
+  STANDARD_RANGE = [32.0, 37.0] # Inclusive on both ends
   if STANDARD_RANGE[1] != LATEST_CARD_SET:
     raise ValueError('Make sure you update the standard range when new sets come out')
   CORE_SET = STANDARD_RANGE[0] - 0.5
