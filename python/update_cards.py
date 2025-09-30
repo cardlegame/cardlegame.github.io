@@ -37,8 +37,6 @@ CARD_SETS = {
   'BATTLEGROUNDS': None,
   'LETTUCE': None, # Mercenaries
   'PLACEHOLDER_202204': None,
-  
-  # TODO: Confirm no data changes
   'BASIC': None,
   'HERO_SKINS': None,
   'TUTORIAL': None,
