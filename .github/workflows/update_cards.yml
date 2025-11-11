@@ -36,3 +36,5 @@ jobs:
         git config --global user.name "Cardle crontab"
         git commit -am "Updated cards on $(date)"
         git push
+        echo "::warning::This action updated cards"
+
