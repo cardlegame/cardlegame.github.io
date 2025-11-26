@@ -36,5 +36,6 @@ jobs:
         git config --global user.name "Cardle crontab"
         git commit -am "Updated cards on $(date)"
         git push
-        echo "::warning::This action updated cards"
+        echo "::error::Failing the action to indicate that we updated cards."
+        exit 1
 
