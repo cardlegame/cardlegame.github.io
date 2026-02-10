@@ -114,6 +114,7 @@ CARD_SETS = {
   'TIME_TRAVEL': 37.0, # Across the Timeways
 } # end CARD_SETS
 LATEST_CARD_SET = list(CARD_SETS.values())[-1]
+STANDARD_RANGE = [32.0, 37.0] # Inclusive on both ends
 
 if __name__ == '__main__':
   repo_root = Path(subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], text=True).strip())
@@ -157,7 +158,6 @@ if __name__ == '__main__':
   standard_cards = []
   spider_tanks = []
 
-  STANDARD_RANGE = [32.0, 37.0] # Inclusive on both ends
   if STANDARD_RANGE[1] != LATEST_CARD_SET:
     raise ValueError('Make sure you update the standard range when new sets come out')
   CORE_SET = STANDARD_RANGE[0] - 0.5

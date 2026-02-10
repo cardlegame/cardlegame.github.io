@@ -2,15 +2,16 @@ import bs4
 import requests
 import subprocess
 from pathlib import Path
+from datetime import datetime
 
 from hearthstone import cardxml
 from hearthstone.enums import CardType, CardSet
 
-from update_cards import CARD_SETS, LATEST_CARD_SET
+from update_cards import CARD_SETS, LATEST_CARD_SET, STANDARD_RANGE
+
+repo_root = Path(subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], text=True).strip())
 
 def download_set_image(card_set_id):
-  repo_root = Path(subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], text=True).strip())
-
   r = requests.get('https://hearthstone.blizzard.com/en-us/expansions-adventures')
   r.raise_for_status()
   soup = bs4.BeautifulSoup(r.text, 'html.parser')
@@ -41,7 +42,7 @@ def add_card_set(new_set_line, new_standard_range):
   contents = contents[:end_line] + [new_set_line] + contents[end_line:]
 
   for i in range(len(contents)):
-    if contents[i].startswith('  STANDARD_RANGE ='):
+    if 'STANDARD_RANGE =' in contents[i]:
       contents[i] = new_standard_range
 
   with update_cards.open('w') as f:
@@ -65,6 +66,27 @@ def add_garbage_set(new_set_line):
   with update_cards.open('w') as f:
     f.write('\n'.join(contents))
 
+def add_new_year(new_year):
+  update_cards = Path(__file__).with_name('update_cards.py')
+  with update_cards.open('r') as f:
+    contents = f.read().split('\n')
+
+  end_sets = contents.index('} # end CARD_SETS')
+  for line in contents[end_sets:0:-1]:
+    if line.startswith('  # ') and line[4:].isdigit():
+      latest_year = int(line[4:])
+      break
+      
+  if new_year == latest_year:
+    return False
+    
+  contents.insert(end_sets, '')
+  contents.insert(end_sets, f'  # {new_year}')
+
+  with update_cards.open('w') as f:
+    f.write('\n'.join(contents))
+  return True
+
 if __name__ == '__main__':
   cardid_db, _ = cardxml.load()
   latest_card_sets = set()
@@ -86,15 +108,16 @@ if __name__ == '__main__':
     new_set_line = f"  '{card_set}': None,"
     add_garbage_set(new_set_line)
 
+  if add_new_year(datetime.now().year):
+    old_core_set = STANDARD_RANGE[0] - 0.5
+    STANDARD_RANGE[0] += 3.0
+    new_core_set = STANDARD_RANGE[0] - 0.5
+    Path(f'{repo_root}/public/sets/{old_core_set:.1f}.png').rename(f'{new_core_set:.1f}.png')
+
   for card_set in latest_card_sets:
     card_set_id = LATEST_CARD_SET + 1
     card_set_title = download_set_image(card_set_id)
 
-    # TODO: Rotation is a ??? for later, but the required actions are:
-    # - update the min value for STANDARD_RANGE
-    # - compute CORE_SET = STANDARD_RANGE[0] - 0.5
-    # - rename the core_set image
-
     new_set_line = f"  '{card_set}': {card_set_id:0.1f}, # {card_set_title}"
-    new_standard_line = f"  STANDARD_RANGE = [32.0, {card_set_id:0.1f}] # Inclusive on both ends"
+    new_standard_line = f"  STANDARD_RANGE = [{STANDARD_RANGE[0]}, {card_set_id:0.1f}] # Inclusive on both ends"
     add_card_set(new_set_line, new_standard_line)
