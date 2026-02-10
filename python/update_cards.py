@@ -112,9 +112,12 @@ CARD_SETS = {
   'EMERALD_DREAM': 35.0, # Into the Emerald Dream
   'THE_LOST_CITY': 36.0, # The Lost City of Un'Goro
   'TIME_TRAVEL': 37.0, # Across the Timeways
+  # 2026
+
+  'CATACLYSM': 38.0, # Cataclysm
 } # end CARD_SETS
 LATEST_CARD_SET = list(CARD_SETS.values())[-1]
-STANDARD_RANGE = [32.0, 37.0] # Inclusive on both ends
+STANDARD_RANGE = [35.0, 38.0] # Inclusive on both ends
 
 if __name__ == '__main__':
   repo_root = Path(subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], text=True).strip())

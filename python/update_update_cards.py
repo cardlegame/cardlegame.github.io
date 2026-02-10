@@ -109,15 +109,16 @@ if __name__ == '__main__':
     add_garbage_set(new_set_line)
 
   if add_new_year(datetime.now().year):
+    print('NEW YEAR, NEW CARDS, NEW STANDARD_RANGE')
     old_core_set = STANDARD_RANGE[0] - 0.5
     STANDARD_RANGE[0] += 3.0
     new_core_set = STANDARD_RANGE[0] - 0.5
-    Path(f'{repo_root}/public/sets/{old_core_set:.1f}.png').rename(f'{new_core_set:.1f}.png')
+    Path(f'{repo_root}/public/sets/{old_core_set:.1f}.png').rename(f'{repo_root}/public/sets/{new_core_set:.1f}.png')
 
   for card_set in latest_card_sets:
     card_set_id = LATEST_CARD_SET + 1
     card_set_title = download_set_image(card_set_id)
 
     new_set_line = f"  '{card_set}': {card_set_id:0.1f}, # {card_set_title}"
-    new_standard_line = f"  STANDARD_RANGE = [{STANDARD_RANGE[0]}, {card_set_id:0.1f}] # Inclusive on both ends"
+    new_standard_line = f'STANDARD_RANGE = [{STANDARD_RANGE[0]}, {card_set_id:0.1f}] # Inclusive on both ends'
     add_card_set(new_set_line, new_standard_line)
