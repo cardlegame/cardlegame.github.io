@@ -76,10 +76,10 @@ def add_new_year(new_year):
     if line.startswith('  # ') and line[4:].isdigit():
       latest_year = int(line[4:])
       break
-      
+
   if new_year == latest_year:
     return False
-    
+
   contents.insert(end_sets, '')
   contents.insert(end_sets, f'  # {new_year}')
 
