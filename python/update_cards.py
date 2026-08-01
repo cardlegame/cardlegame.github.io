@@ -44,6 +44,7 @@ CARD_SETS = {
   'MISSIONS': None,
   'TAVERNS_OF_TIME': None,
   'PET': None,
+  'CORE_HIDDEN': None,
 
   # Valid, but lower priority than actual sets
   'CORE': -2.0,
