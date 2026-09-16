@@ -117,9 +117,10 @@ CARD_SETS = {
 
   'CATACLYSM': 38.0, # Cataclysm
   'ESCAPEFROM_VIOLET_HOLD': 39.0, # Escape from Violet Hold
+  'BE': 40.0, # Reign of the Black Empire
 } # end CARD_SETS
 LATEST_CARD_SET = list(CARD_SETS.values())[-1]
-STANDARD_RANGE = [35.0, 39.0] # Inclusive on both ends
+STANDARD_RANGE = [35.0, 40.0] # Inclusive on both ends
 
 if __name__ == '__main__':
   repo_root = Path(subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], text=True).strip())
