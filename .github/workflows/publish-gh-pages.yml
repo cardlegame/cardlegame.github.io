@@ -21,17 +21,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@main
+      - uses: actions/setup-node@main
         with:
           node-version: 22
       - run: npm install
       - run: npm run build
         env:
           PUBLIC_URL: 'https://cardlegame.com'
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@main
       - run: cp -r Cardle build/ # Redirect page from the old site
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@main
         with:
           path: build/
 
@@ -42,4 +42,4 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/deploy-pages@v4
+      - uses: actions/deploy-pages@main

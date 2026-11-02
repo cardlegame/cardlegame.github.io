@@ -5,6 +5,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+  actions: write
 
 jobs:
   run:
@@ -18,6 +19,8 @@ jobs:
     - run: pip install -U -r python/requirements.txt # Will automatically pull the latest version (and thus card data) from pypi
     - name: Update cards and/or download new set data
       timeout-minutes: 60
+      env:
+        GH_TOKEN: ${{ github.token }}
       run: |
         CARDS_ERROR=0
         python -u python/update_cards.py || CARDS_ERROR=$?
@@ -37,4 +40,5 @@ jobs:
         git config --global user.name "Cardle crontab"
         git commit -m "Updated cards on $(date)"
         git push
+        gh workflow run publish-gh-pages.yml # Manually trigger github pages upload
 
